@@ -1,0 +1,26 @@
+{
+  "name": "scheduler_bot_horizons",
+  "version": "1.0.0",
+  "description": "Smeet, Claudia, Sahir",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/londonbatley/scheduler_bot_horizons.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/londonbatley/scheduler_bot_horizons/issues"
+  },
+  "homepage": "https://github.com/londonbatley/scheduler_bot_horizons#readme",
+  "dependencies": {
+    "@slack/client": "^3.10.0",
+    "body-parser": "^1.17.2",
+    "expres": "0.0.5",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.5"
+  }
+}
