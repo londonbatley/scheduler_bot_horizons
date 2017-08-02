@@ -26,39 +26,47 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function(startData){
 // Makes Snoop live
 rtm.on(RTM_EVENTS.MESSAGE, async function(message){
 
+  var dm = rtm.dataStore.getDMByUserId(message.user);
+  if (!dm || dm.id !== message.channel || message.type !== 'message'){
+    return;
+  }
+
+console.log('in message');
+
+  console.log('message', message)
+  var users = await User.find({})
+  console.log("all users", users);
+  var user = await User.findOne({slackId: message.user});
+  console.log('user is: ', user);
+
+
+  if (!user) {
+    console.log('There is no user', 'message.channel is :', message.channel);
+    var newUser = new User({
+      slackId: message.user,
+      slackDmId: message.channel
+    })
+    console.log("this is my new user:", newUser);
+    await newUser.save();
+    user = await User.findById(newUser._id)
+  }
+  console.log('middle', user, newUser);
+  if (!user.google.profile_id) {
+    console.log('there is no google')
+    rtm.sendMessage(`I need ya calendar. Click this link mf http://localhost:3000/connect?auth_id=${encodeURIComponent(user._id)}`, message.channel)
+  }
+
+  try {
+    // pass message object into AIquery function
+    var response = await AIquery(message.text, message.user)
+    rtm.sendMessage(response.data.result.fulfillment.speech, message.channel)
+    console.log(response.data.result);
+
+  } catch(error) {
+    console.log("ERROR", error);
+  }
 //var slackUser = rtm.dataStore.getDMByUserId(message.user);
-console.log('messaev', message)
-var users = await User.find({})
-console.log("all users", users);
-var user = await User.findOne({slackId: message.user});
-console.log('user is: ', user);
-
-
-if (!user) {
-  console.log('There is no user', 'message.channel is :', message.channel);
-  var newUser = new User({
-    slackId: message.user,
-    slackDmId: message.channel
-  })
-  console.log("this is my new user:", newUser);
-  await newUser.save();
-  user = await User.findById(newUser._id)
-}
-console.log('middle', user, newUser);
-if (!user.google.profile_id) {
-  console.log('there is no google')
-  rtm.sendMessage(`Click this link mf https://localhost:3000/connect?auth_id=${encodeURIComponent(user._id)}`, message.channel)
-}
-
-
-  AIquery(message.text, message.user)
-  // pass message object into AIquery function
-  .then(function(response) {
-    rtm.sendMessage(response.data.result.fulfillment.speech, message.channel);
-  }).catch(function(err) {
-    console.log('This is the error: ', err);
-  })
-
+  
 });
 
 function AIquery(str, sessionId) {

@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var rtm = require('./bot').rtm;
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
-var User = require('./models.js');
+var User = require('./models.js').User;
 
 var app = express();
 var auth = new googleAuth();
