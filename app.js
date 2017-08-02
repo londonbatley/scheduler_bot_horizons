@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
-var rtm = require('../main').rtm;
+var rtm = require('./bot').rtm;
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 
