@@ -31,6 +31,8 @@ rtm.on(RTM_EVENTS.MESSAGE, async function(message){
     return;
   }
 
+
+
 console.log('in message');
 
   console.log('message', message)
@@ -39,6 +41,11 @@ console.log('in message');
   var user = await User.findOne({slackId: message.user});
   console.log('user is: ', user);
 
+  // TODO: make this with interactive message
+  if (user.pending) {
+    console.log('hereeeeererererere');
+    rtm.sendMessage('Hold up, we doin sumthin', message.channel);
+  }
 
   if (!user) {
     console.log('There is no user', 'message.channel is :', message.channel);
@@ -59,8 +66,18 @@ console.log('in message');
   try {
     // pass message object into AIquery function
     var response = await AIquery(message.text, message.user)
-    rtm.sendMessage(response.data.result.fulfillment.speech, message.channel)
-    console.log(response.data.result);
+
+
+    //TODO : make interactive message 
+    if (response.data.result.actionIncomplete === true) {
+      rtm.sendMessage(response.data.result.fulfillment.speech, message.channel);
+    } else {
+      user.pending = JSON.stringify({
+        date: response.data.result.parameters.date,
+        subject: response.data.result.parameters.subject,
+      })
+      await user.save()
+    }
 
   } catch(error) {
     console.log("ERROR", error);
