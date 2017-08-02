@@ -12,6 +12,13 @@ var auth = new googleAuth();
 // check if user has authenticated google calendar
 //var oauth2client = new auth.Oauth2
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.get('/', function(req, res){
+  res.json('hello');
+})
+
 app.get('/connect', async function(req, res){
   var user = await User.findById(req.query.auth_id);
   console.log(user)
@@ -19,8 +26,6 @@ app.get('/connect', async function(req, res){
 
 
 
-app.listen(3000, 
-  console.log('We good to go on port 3000 captain')
-);
+app.listen(3000);
 
 rtm.start();

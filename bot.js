@@ -26,20 +26,27 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function(startData){
 // Makes Snoop live
 rtm.on(RTM_EVENTS.MESSAGE, async function(message){
 
-var slackUser = rtm.dataStore.getDMByUserId(message.user);
-
+//var slackUser = rtm.dataStore.getDMByUserId(message.user);
+console.log('messaev', message)
+var users = await User.find({})
+console.log("all users", users);
 var user = await User.findOne({slackId: message.user});
+console.log('user is: ', user);
+
 
 if (!user) {
+  console.log('There is no user', 'message.channel is :', message.channel);
   var newUser = new User({
     slackId: message.user,
-    name: slackUser.name,
-    slackDMId: message.channel,
+    slackDmId: message.channel
   })
+  console.log("this is my new user:", newUser);
   await newUser.save();
+  user = await User.findById(newUser._id)
 }
-
+console.log('middle', user, newUser);
 if (!user.google.profile_id) {
+  console.log('there is no google')
   rtm.sendMessage(`Click this link mf https://localhost:3000/connect?auth_id=${encodeURIComponent(user._id)}`, message.channel)
 }
 

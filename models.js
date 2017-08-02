@@ -6,7 +6,6 @@ mongoose.connect(process.env.MONGODB_URI);
 var User = mongoose.model('User', {
   slackId: String,
   slackDmId: String,
-  name: String,
   google: {
     profile_id: String,
     profile_name: String,
