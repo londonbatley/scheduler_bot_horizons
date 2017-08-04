@@ -9,7 +9,6 @@ var User = mongoose.model('User', {
   google: {
     profile_id: String,
     profile_name: String,
-    profile_email: String,
     access_token: String,
     id_token: String,
     refresh_token: String,

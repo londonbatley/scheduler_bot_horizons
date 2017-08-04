@@ -42,10 +42,13 @@ console.log('in message');
   console.log('user is: ', user);
 
   // TODO: make this with interactive message
-  if (user.pending) {
-    console.log('hereeeeererererere');
-    rtm.sendMessage('Hold up, we doin sumthin', message.channel);
+  if (user){
+    if (user.pending) {
+      console.log('hereeeeererererere');
+      rtm.sendMessage('Hold up, we doin sumthin', message.channel);
+    }
   }
+ 
 
   if (!user) {
     console.log('There is no user', 'message.channel is :', message.channel);
@@ -61,7 +64,7 @@ console.log('in message');
   if (!user.google.profile_id) {
     console.log('there is no google')
     rtm.sendMessage(`I need ya calendar. Click this link mf http://localhost:3000/connect?auth_id=${encodeURIComponent(user._id)}`, message.channel)
-  }
+  } 
 
   try {
     // pass message object into AIquery function
@@ -85,6 +88,8 @@ console.log('in message');
 //var slackUser = rtm.dataStore.getDMByUserId(message.user);
   
 });
+
+
 
 function AIquery(str, sessionId) {
   return axios.post('https://api.api.ai/v1/query?v=20150910', {
